@@ -1,4 +1,4 @@
-# 📱 Address Book Android App
+# 📱 Address Book Android App - Lab 2 (2023-3-60-051)
 
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com/)
 [![Java](https://img.shields.io/badge/Language-Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.java.com/)
