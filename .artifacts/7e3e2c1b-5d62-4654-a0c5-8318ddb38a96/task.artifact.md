@@ -1,0 +1,8 @@
+- [x] Create `Contact.java` data model
+- [x] Create `row_contact.xml` layout
+- [x] Update `EventDB.java` with `contacts` table and CRUD methods
+- [x] Create `ActivityAdapter.java` and delete `CustomListAdapter.java`
+- [x] Update `AddressDetails_Activity.java` to use `EventDB`
+- [x] Update `AddressBook_Activity.java` to use `ActivityAdapter` and `EventDB`
+- [x] Add DOB to `row_contact.xml` and `ActivityAdapter.java`
+- [x] Verify build and functionality

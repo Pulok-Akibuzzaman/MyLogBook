@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Lab2(2023-3-60-051)</string>
+
+    <!-- Address Book List -->
+    <string name="address_book_list">Address Book List</string>
+    <string name="log_out">Log Out</string>
+    <string name="new_contact">New Contact</string>
+    <string name="contact_icon">Contact Icon</string>
+    <string name="full_name_placeholder">Full Name</string>
+    <string name="phone_placeholder">01XXXXXXXXX</string>
+    <string name="dob_placeholder">DD/MM/YYYY</string>
+
+    <!-- Address Details -->
+    <string name="address_details">Address Book Details</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
+    <string name="name_label">Full Name</string>
+    <string name="email_label">Email Address</string>
+    <string name="phone_label">Phone </string>
+    <string name="dob_label">Date of Birth</string>
+    <string name="present_address_label">Present Address</string>
+    <string name="permanent_address_label">Permanent Address</string>
+    <string name="profile_image_desc">Profile Image</string>
+
+    <!-- Login Page & Sign Up -->
+    <string name="login_page">Login Page</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="user_id_label">User ID</string>
+    <string name="password_label">Password</string>
+    <string name="confirm_label">Confirm</string>
+    <string name="remember_me">Remember me</string>
+    <string name="auto_login">Auto Login</string>
+    <string name="create_account_prompt">New user? Create Account</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="exit_app">Exit</string>
+    <string name="sign_in">Sign In</string>
+    <string name="user_id_hint">4-6 digits</string>
+    <string name="required_hint">Required</string>
+    <string name="name_placeholder">Your full name</string>
+    <string name="email_placeholder">mail@example.com</string>
+    <string name="password_placeholder">******</string>
+    <string name="remember_user_id">Remember User ID</string>
+    <string name="keep_me_logged_in">Keep me logged in</string>
+    <string name="pass_label">Password</string>
+    <string name="email_label_short">E-mail</string>
+    <string name="name_label_short">Name</string>
+
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:gravity="center_vertical"
+    android:background="?android:attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/ivProfileIcon"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/ic_person"
+        android:padding="12dp"
+        android:background="#F0F4F8"
+        app:tint="#0052D4"
+        android:contentDescription="@string/contact_icon" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="20dp">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/full_name_placeholder"
+            android:textColor="#0052D4"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/phone_placeholder"
+            android:textColor="#555555"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ic_phone"
+            android:drawablePadding="8dp"
+            app:drawableTint="#757575" />
+
+        <TextView
+            android:id="@+id/tvDob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/dob_placeholder"
+            android:textColor="#888888"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_calendar"
+            android:drawablePadding="8dp"
+            app:drawableTint="#888888" />
+    </LinearLayout>
+
+</LinearLayout>

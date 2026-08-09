@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F4F8"
+    android:orientation="vertical"
+    tools:context=".AddressBook_Activity">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/gradient_blue"
+        android:gravity="center"
+        android:text="@string/address_book_list"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:elevation="6dp"
+        android:padding="12dp">
+
+        <ListView
+            android:id="@+id/lvAddressBook"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#F0F0F0"
+            android:dividerHeight="2dp"
+            tools:listitem="@layout/row_contact" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="#FFFFFF"
+        android:elevation="10dp">
+
+        <Button
+            android:id="@+id/btnExit"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:backgroundTint="#F44336"
+            app:cornerRadius="28dp"
+            android:text="@string/log_out"
+            android:textColor="#FFFFFF"
+            android:layout_margin="6dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnAddNew"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:backgroundTint="#2196F3"
+            app:cornerRadius="28dp"
+            android:text="@string/new_contact"
+            android:textColor="#FFFFFF"
+            android:layout_margin="6dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
