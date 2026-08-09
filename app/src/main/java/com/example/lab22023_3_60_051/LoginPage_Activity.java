@@ -23,25 +23,26 @@ public class LoginPage_Activity extends Activity {
         setContentView(R.layout.activity_login_page);
 
         sp = this.getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        EventDB db = new EventDB(this);
         
-        // Try to get data from Intent first
-        Intent i = this.getIntent();
-        boolean isUserRemembered;
-        if(i.hasExtra("USER-ID")){
-            userId = i.getStringExtra("USER-ID");
-            userName = i.getStringExtra("USER-NAME");
-            pass = i.getStringExtra("PASS");
-            phone = i.getStringExtra("PHONE");
-            email = i.getStringExtra("EMAIL");
-            isUserRemembered = i.getBooleanExtra("REM-USER", false);
-        } else {
-            // Fallback to SharedPreferences
-            userId = sp.getString("USER-ID", null);
-            userName = sp.getString("USER-NAME", "");
-            pass = sp.getString("PASS", "");
-            phone = sp.getString("PHONE", "");
-            email = sp.getString("EMAIL", "");
-            isUserRemembered = sp.getBoolean("REM-USER", false);
+        // Get the User ID from Intent (SignUp) or Preferences (Last login)
+        userId = getIntent().getStringExtra("USER-ID");
+        if (userId == null) {
+            userId = sp.getString("LAST-USER-ID", null);
+        }
+
+        boolean isUserRemembered = sp.getBoolean("REM-USER", false);
+
+        // If we have a userId, load the rest from the Database
+        if (userId != null) {
+            android.database.Cursor cursor = db.getUser(userId);
+            if (cursor.moveToFirst()) {
+                userName = cursor.getString(1);
+                email = cursor.getString(2);
+                phone = cursor.getString(3);
+                pass = cursor.getString(4);
+            }
+            cursor.close();
         }
 
         //Edit Text Fields
@@ -93,14 +94,13 @@ public class LoginPage_Activity extends Activity {
 
 
     }
-    //Method
     private void accessFieldsData(){
-        String userId= etUserID.getEditableText().toString().trim();
+        String typedUserId= etUserID.getEditableText().toString().trim();
         String password= etPassword.getEditableText().toString().trim();
         boolean isRememberUserIdChecked = cbRememberUser.isChecked() ;
         boolean isRememberLogin = cbRememberLogin.isChecked() ;
 
-        if(userId.length()<4 || userId.length()>6){
+        if(typedUserId.length()<4 || typedUserId.length()>6){
             Toast.makeText(this,"UserId must have 4 to 6 digits", Toast.LENGTH_LONG).show();
             return;
         }
@@ -110,31 +110,39 @@ public class LoginPage_Activity extends Activity {
             return;
         }
 
-        if(this.userId == null || !this.userId.equals(userId)){
-            Toast.makeText(this, "User Id didn't match", Toast.LENGTH_LONG).show();
+        // Verify from DB
+        EventDB db = new EventDB(this);
+        android.database.Cursor cursor = db.getUser(typedUserId);
+        if (!cursor.moveToFirst()) {
+            Toast.makeText(this, "User ID not found", Toast.LENGTH_LONG).show();
+            cursor.close();
             return;
         }
 
-        if(this.pass == null || !this.pass.equals(password)){
+        String dbPass = cursor.getString(4);
+        if (!dbPass.equals(password)) {
             Toast.makeText(this, "Password didn't match", Toast.LENGTH_LONG).show();
+            cursor.close();
             return;
         }
 
-        // Update preferences
+        // If login successful, update 'this' fields for the intent
+        this.userId = typedUserId;
+        this.userName = cursor.getString(1);
+        this.email = cursor.getString(2);
+        this.phone = cursor.getString(3);
+        cursor.close();
+
+        // Update preferences for last session
         SharedPreferences.Editor editor = sp.edit();
+        editor.putString("LAST-USER-ID", typedUserId);
         editor.putBoolean("REM-LOGIN", isRememberLogin);
         editor.putBoolean("REM-USER", isRememberUserIdChecked);
         editor.apply();
 
-       Intent i = new Intent(this, AddressBook_Activity.class);
-        i.putExtra("USER-ID",userId);
-        i.putExtra("USER-NAME", userName);
-        i.putExtra("PASS", password);
-        i.putExtra("EMAIL", email);
-        i.putExtra("PHONE", phone);
+        Intent i = new Intent(this, AddressBook_Activity.class);
+        i.putExtra("USER-ID", typedUserId);
         startActivity(i);
         finishAffinity();
-
-
     }
 }

@@ -20,6 +20,7 @@ public class AddressDetails_Activity extends AppCompatActivity {
     private EventDB db;
     private String existingEmail = null;
     private String imageUri = null;
+    private String userId = null;
 
     private final ActivityResultLauncher<String> imagePickerLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
@@ -46,6 +47,8 @@ public class AddressDetails_Activity extends AppCompatActivity {
 
         ivProfile.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
+        userId = getIntent().getStringExtra("USER-ID");
+
         // Check if we are editing an existing contact
         existingEmail = getIntent().getStringExtra("CONTACT_EMAIL");
         if (existingEmail != null) {
@@ -70,7 +73,7 @@ public class AddressDetails_Activity extends AppCompatActivity {
         });
     }
     private void loadContactData(String email) {
-        Cursor cursor = db.getAllContacts();
+        Cursor cursor = db.getAllContacts(userId);
         while (cursor.moveToNext()) {
             if (cursor.getString(0).equals(email)) {
                 etEmail.setText(cursor.getString(0));
@@ -128,9 +131,9 @@ public class AddressDetails_Activity extends AppCompatActivity {
         }
 
         if (existingEmail != null) {
-            db.updateContact(name, email, phone, dob, presentAddress, permanentAddress, imageUri);
+            db.updateContact(userId, name, email, phone, dob, presentAddress, permanentAddress, imageUri);
         } else {
-            db.insertContact(name, email, phone, dob, presentAddress, permanentAddress, imageUri);
+            db.insertContact(userId, name, email, phone, dob, presentAddress, permanentAddress, imageUri);
         }
 
         Toast.makeText(this, "Information Saved Successfully", Toast.LENGTH_SHORT).show();

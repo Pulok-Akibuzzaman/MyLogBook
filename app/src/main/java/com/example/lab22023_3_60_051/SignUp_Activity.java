@@ -16,21 +16,16 @@ public class SignUp_Activity extends Activity {
     private Button btnExit, btnAlreadyHave, btnGo;
 
     private SharedPreferences sp;
-    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         sp = this.getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        userId = sp.getString("USER-ID", "NOT-CREATED");
+        String lastUserId = sp.getString("LAST-USER-ID", "NOT-CREATED");
         boolean showSignUp = getIntent().getBooleanExtra("SHOW_SIGNUP", false);
 
-        if (!userId.equals("NOT-CREATED") && !showSignUp) {
-            String userName = sp.getString("USER-NAME", "");
-            String pass = sp.getString("PASS", "");
-            String email = sp.getString("EMAIL", "");
-            String phone = sp.getString("PHONE", "");
+        if (!lastUserId.equals("NOT-CREATED") && !showSignUp) {
             boolean isLoginRemembered = sp.getBoolean("REM-LOGIN", false);
 
             Intent i;
@@ -40,14 +35,7 @@ public class SignUp_Activity extends Activity {
                 i = new Intent(this, LoginPage_Activity.class);
             }
             
-            boolean isUserRemembered = sp.getBoolean("REM-USER", false);
-            i.putExtra("REM-USER", isUserRemembered);
-            i.putExtra("USER-ID", userId);
-            i.putExtra("USER-NAME", userName);
-            i.putExtra("PASS", pass);
-            i.putExtra("EMAIL", email);
-            i.putExtra("PHONE", phone);
-            
+            i.putExtra("USER-ID", lastUserId);
             startActivity(i);
             finish();
             return;
@@ -129,24 +117,20 @@ public class SignUp_Activity extends Activity {
             Toast.makeText(this,"Re-Type Password. Password is Incorrect",Toast.LENGTH_LONG).show();
             return;
         }
-        //
+        // Save user in DB
+        EventDB db = new EventDB(this);
+        db.insertUser(userId, userName, email, phone, password);
+
+        // Update preferences for last user session
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("USER-ID", userId);
-        editor.putString("USER-NAME", userName );
-        editor.putString("PASS", password);
-        editor.putString("EMAIL",email );
-        editor.putString("PHONE",phone );
+        editor.putString("LAST-USER-ID", userId);
         editor.putBoolean("REM-LOGIN", isRememberLogin);
-        editor.putBoolean("REM-USER",isRememberUserIdChecked);
+        editor.putBoolean("REM-USER", isRememberUserIdChecked);
         editor.apply();
 
-        //
+        // Pass to Address Book
         Intent i = new Intent(this, AddressBook_Activity.class);
         i.putExtra("USER-ID", userId);
-        i.putExtra("USER-NAME", userName);
-        i.putExtra("PASS", password);
-        i.putExtra("EMAIL", email);
-        i.putExtra("PHONE", phone);
         startActivity(i);
         finishAffinity();
 

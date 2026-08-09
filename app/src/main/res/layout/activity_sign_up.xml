@@ -190,11 +190,13 @@
                 android:id="@+id/cbRememberUser"
                 android:text="@string/remember_user_id"
                 android:textColor="#444444"
+                android:buttonTint="#0052D4"
                 android:layout_marginTop="8dp"/>
 
             <CheckBox
                 android:id="@+id/cbRememberLogin"
                 android:text="@string/keep_me_logged_in"
+                android:buttonTint="#0052D4"
                 android:textColor="#444444"/>
 
             <Button

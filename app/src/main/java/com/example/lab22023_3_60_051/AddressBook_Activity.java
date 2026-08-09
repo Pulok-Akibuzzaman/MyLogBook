@@ -23,11 +23,17 @@ public class AddressBook_Activity extends Activity {
     private ArrayList<Contact> contactList;
     private ActivityAdapter adapter;
     private EventDB db;
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_book);
+
+        currentUserId = getIntent().getStringExtra("USER-ID");
+        if (currentUserId == null) {
+            currentUserId = getSharedPreferences("UserPrefs", MODE_PRIVATE).getString("LAST-USER-ID", null);
+        }
 
         db = new EventDB(this);
         lvAddressBook = findViewById(R.id.lvAddressBook);
@@ -58,6 +64,7 @@ public class AddressBook_Activity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(AddressBook_Activity.this, AddressDetails_Activity.class);
+                i.putExtra("USER-ID", currentUserId);
                 startActivity(i);
             }
         });
@@ -67,6 +74,7 @@ public class AddressBook_Activity extends Activity {
             Contact c = contactList.get(position);
             Intent i = new Intent(AddressBook_Activity.this, AddressDetails_Activity.class);
             i.putExtra("CONTACT_EMAIL", c.email);
+            i.putExtra("USER-ID", currentUserId);
             startActivity(i);
         });
 
@@ -87,7 +95,7 @@ public class AddressBook_Activity extends Activity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // Delete from database
-                                db.deleteContact(c.email);
+                                db.deleteContact(currentUserId, c.email);
 
                                 // Remove from list and refresh
                                 contactList.remove(position);
@@ -114,7 +122,7 @@ public class AddressBook_Activity extends Activity {
 
     private void loadContacts() {
         contactList.clear();
-        Cursor cursor = db.getAllContacts();
+        Cursor cursor = db.getAllContacts(currentUserId);
         while (cursor.moveToNext()) {
             String email = cursor.getString(0);
             String name = cursor.getString(1);

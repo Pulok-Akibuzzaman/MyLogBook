@@ -85,11 +85,13 @@
             android:id="@+id/cbRememberUser"
             android:text="@string/remember_me"
             android:textColor="#444444"
+            android:buttonTint="#0052D4"
             android:layout_marginBottom="8dp"/>
         <CheckBox
             android:id="@+id/cbRememberLogin"
             android:text="@string/auto_login"
             android:textColor="#444444"
+            android:buttonTint="#0052D4"
             android:layout_marginBottom="32dp"/>
 
 
