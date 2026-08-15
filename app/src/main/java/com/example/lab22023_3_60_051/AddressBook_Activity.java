@@ -11,6 +11,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import android.os.AsyncTask;
+import java.util.List;
 
 import com.example.lab22023_3_60_051.R;
 
@@ -115,6 +119,14 @@ public class AddressBook_Activity extends Activity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        String keys[] = {"action", "sid", "semester"};
+        String values[] = {"restore", "2023-3-60-051", "2026-3"};
+        httpRequest(keys, values);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         loadContacts();
@@ -135,5 +147,57 @@ public class AddressBook_Activity extends Activity {
         }
         cursor.close();
         adapter.notifyDataSetChanged();
+    }
+
+    private void httpRequest(final String keys[], final String values[]) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                String url = "https://www.muthosoft.com/univ/cse489/index.php";
+                try {
+                    String data = RemoteAccess.getInstance().makeHttpRequest(url, "POST", keys, values);
+                    return data;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            protected void onPostExecute(String data) {
+                if (data != null) {
+                    updateLocalDBByServerData(data);
+                }
+            }
+        }.execute();
+    }
+
+    private void updateLocalDBByServerData(String data) {
+        System.out.println("found: " + data);
+        if (currentUserId == null) return;
+        try {
+            JSONObject jo = new JSONObject(data);
+            if (jo.has("key-value")) {
+                JSONArray ja = jo.getJSONArray("key-value");
+                for (int i = 0; i < ja.length(); i++) {
+                    JSONObject summary = ja.getJSONObject(i);
+                    String uniqueKey = summary.getString("key");
+                    String rowValue = summary.getString("value");
+                    String[] fields = rowValue.split("::");
+                    if (fields.length >= 7) {
+                        String name = fields[0];
+                        String email = fields[1];
+                        String phone = fields[2];
+                        String dob = fields[3];
+                        String present = fields[4];
+                        String permanent = fields[5];
+                        String imageUri = fields[6].equals("null") ? null : fields[6];
+                        db.insertContact(currentUserId, name, email, phone, dob, present, permanent, imageUri);
+                    }
+                }
+                loadContacts();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

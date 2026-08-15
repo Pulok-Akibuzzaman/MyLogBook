@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.os.AsyncTask;
+import java.util.ArrayList;
+import java.util.List;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -136,10 +139,39 @@ public class AddressDetails_Activity extends AppCompatActivity {
             db.insertContact(userId, name, email, phone, dob, presentAddress, permanentAddress, imageUri);
         }
 
+        // Prepare data for remote backup
+        String uniqueKey = email;
+        String rowValue = name + "::" + email + "::" + phone + "::" + dob + "::" + presentAddress + "::" + permanentAddress + "::" + (imageUri != null ? imageUri : "null");
+        String keys[] = {"action", "sid", "semester", "key", "value"};
+        String values[] = {"backup", "2023-3-60-051", "2026-3", uniqueKey, rowValue};
+        httpRequest(keys, values);
+
         Toast.makeText(this, "Information Saved Successfully", Toast.LENGTH_SHORT).show();
         finish();
     }
     public boolean isValidEmailAddress(String email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void httpRequest(final String keys[], final String values[]) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                String url = "https://www.muthosoft.com/univ/cse489/key_value.php";
+                try {
+                    String data = RemoteAccess.getInstance().makeHttpRequest(url, "POST", keys, values);
+                    return data;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            protected void onPostExecute(String data) {
+                if (data != null) {
+                    Toast.makeText(getApplicationContext(), data, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
     }
 }
